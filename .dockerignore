@@ -1,0 +1,25 @@
+# Git
+.git/
+.gitignore
+
+# Python
+__pycache__/
+*.py[oc]
+.venv/
+
+# Secrets
+.env
+*-key.json
+
+# MLflow tracking
+mlruns/
+
+# Model checkpoints
+models/
+
+# IDE
+.vscode/
+
+# Docs
+README.md
+

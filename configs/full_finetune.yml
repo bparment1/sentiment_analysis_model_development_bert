@@ -1,0 +1,5 @@
+# Full fine-tuning — inherits defaults, overrides below
+freeze_base: false
+learning_rate: 2e-5
+epochs: 3
+experiment_name: bert-full-finetune

@@ -1,0 +1,23 @@
+model_name: bert-base-uncased
+seed: 42
+
+# Data
+batch_size: 8
+max_length: 512
+
+# Training
+epochs: 1
+freeze_base: false
+learning_rate: 2e-5
+weight_decay: 0.01
+scheduler: cosine
+warmup_ratio: 0.06
+max_batches: null
+
+# Paths
+checkpoints_dir: models/checkpoints
+
+# MLflow
+experiment_name: bert-train-sentiment
+tracking_uri: file:./mlruns
+artifact_location: null

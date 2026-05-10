@@ -1,0 +1,25 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Secrets
+.env
+
+# MLflow tracking
+mlruns/
+
+# Model checkpoints
+models/
+
+# GCP service account keys
+*-key.json
+
+# IDE
+.vscode/
