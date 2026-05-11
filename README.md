@@ -51,7 +51,7 @@ You can get help about the script:
 
 ```
 python your_script.py --help
-````
+```
 
 You can run the code from the command line:
 
@@ -64,6 +64,33 @@ python train.py \
 --experiment_name bert-train-sentiment \
 --tracking_uri file:./mlruns 
 ```
+
+# Connect to the database Cloudsql
+
+If you have already setup the postgres database on google cloudsql you can connect via proxy:
+
+```
+cloud-sql-proxy $PROJECT_ID:$REGION:$INSTANCE_NAME &
+```
+
+Make sure first no other database is running on the localhost at port 5432:
+
+```
+ps aux | grep postgres
+```
+
+Stop it if want
+```
+sudo systemctl stop postgresql
+```
+
+Access the database via psql:
+
+```
+psql -h $DB_RE_HOST -U $DB_RE_USER -d DB_RE_DB_NAME -p 5432
+```
+
+Note that because we are using cloud-sql-proxy the hostname is the localhost 127.0.0.1.
 
 # Setting up the cloud infrastructure
 
@@ -85,7 +112,7 @@ gcloud config get-value project
 Create a cloudsql instance of a postgres database using the GUI or command line:
 
 ```
-gcloud sql instances create INSTANCE_NAME \
+gcloud sql instances create $INSTANCE_NAME \
   --database-version=POSTGRES_16 \
   --region=REGION \
   --availability-type=ZONAL \
@@ -120,6 +147,8 @@ chmod +x cloud-sql-proxy
 sudo mv cloud-sql-proxy /usr/local/bin/
 
 #check if installed:
+
+```
 cloud-sql-proxy --version
 
 ```
@@ -165,7 +194,7 @@ sudo systemctl stop postgresql
 Then run this one if using the default port (no postgres running locally):
 
 ```
-cloud-sql-proxy PROJECT_ID:REGION:INSTANCE_NAME &
+cloud-sql-proxy $PROJECT_ID:$REGION:$INSTANCE_NAME &
 psql -h 127.0.0.1 -p 5432 -U postgres -W
 ```
 
@@ -251,10 +280,10 @@ Next we need to set up a bucket to store the model and other artifacts to track 
 BUCKET_NAME=mlflow-artifacts-sentiment-analysis-app
 
 ```
-gcloud storage buckets create gs://BUCKET_NAME \
-  --location=REGION
+gcloud storage buckets create gs://$BUCKET_NAME \
+  --location=$REGION
 ```
-Create service account
+Create service account for mflow.
 
 ```
 gcloud iam service-accounts create mlflow-sa \
@@ -274,8 +303,8 @@ This is more secure than granting project-wide access — limits the service acc
 Grant Storage access
 
 ```
-gcloud projects add-iam-policy-binding PROJECT_ID \
-  --member="serviceAccount:mlflow-sa@PROJECT_ID.iam.gserviceaccount.com" \
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+  --member="serviceAccount:mlflow-sa@$PROJECT_ID.iam.gserviceaccount.com" \
   --role="roles/storage.objectAdmin"
 ```
 
