@@ -316,4 +316,21 @@ python train.py \
 --tracking_uri file:./mlruns \
 --artifact_location gs://my-bucket/mlflow/artifacts 
 
+python train.py \
+--model_name bert-base-uncased \
+--freeze_base \
+--max_batches 10 \
+--number_epoch 3 \
+--experiment_name bert-train-sentiment \
+--tracking_uri "postgresql://mlflow_user:$DB_RE_PASSWORD@127.0.0.1:5432/mlflow"
+--artifact_location gs://mlflow-artifacts-sentiment-analysis-app 
+
+python train.py \
+--model_name bert-base-uncased \
+--freeze_base \
+--max_batches 10 \
+--number_epoch 3 \
+--experiment_name bert-train-sentiment \
+--tracking_uri "postgresql://$DB_RE_DB_NAME:$DB_RE_PASSWORD@127.0.0.1:5432/$DB_RE_USER"
+--artifact_location gs://mlflow-artifacts-sentiment-analysis-app 
 '''

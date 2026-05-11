@@ -139,18 +139,21 @@ First we need to install cloud sql proxy.
 
 ```
 gcloud components install cloud-sql-proxy
+```
 
-# Download the binary directly
+Download the binary directly
+
+```
 curl -o cloud-sql-proxy https://storage.googleapis.com/cloud-sql-connectors/cloud-sql-proxy/v2.15.2/cloud-sql-proxy.linux.amd64
 
 chmod +x cloud-sql-proxy
 sudo mv cloud-sql-proxy /usr/local/bin/
+```
 
-#check if installed:
+Check if installed:
 
 ```
 cloud-sql-proxy --version
-
 ```
 Now we can list the cloudsql instances:
 
