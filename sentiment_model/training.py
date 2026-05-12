@@ -13,7 +13,7 @@ def train_epoch(
     epoch: int,
     epochs: int,
     max_batches: int = None,
-) -> float:
+    ) -> float:
     model.train()
     total_loss = 0
 

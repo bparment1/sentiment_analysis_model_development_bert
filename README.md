@@ -4,12 +4,12 @@ This project builds a sentiment analysis model using BERT with pre-Trained weigh
 
 - mlflow
 - huggingface
-- docker
 - postgres sql
-- cloud run
 - Cloud SQL
 - cloud storage
 - google artifact registry
+- docker
+- cloud run
 - github and git
 
 The general structure of this project repo is as follow:
@@ -254,6 +254,13 @@ To use posgres as a data backend for mlflow we need a database and user. Let's c
 -- Connect to your Cloud SQL instance
 psql -h 127.0.0.1 -U postgres
 
+-- list existing databases
+\l
+
+-- list existing users without and with details
+\du
+\du+
+
 -- Create a dedicated user
 CREATE USER mlflow_user WITH PASSWORD 'strong-password-here';
 
@@ -274,6 +281,18 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO mlflow_us
 -- So future tables created by migrations are also covered
 ALTER DEFAULT PRIVILEGES IN SCHEMA public 
   GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO mlflow_user;
+```
+
+Now we setup the cloudsql proxy and that the mlflow database and the user mlflow_user were created, you can login using the normal command as if it were a localhost database:
+
+```
+psql -h 127.0.0.1 -p 5432 -U mlflow_user -d mlflow -W
+```
+
+You will prompted for the password. If you prefer you can pass the command direclty in a env variable:
+
+```
+PGPASSWORD=$DB_RE_DB_NAME psql -h 127.0.0.1 -p 5432 -U mlflow_user -d mlflow
 ```
 
 # Setup Cloud storage for mlflow
@@ -324,14 +343,42 @@ gcloud iam service-accounts keys create mlflow-sa-key.json \
 export GOOGLE_APPLICATION_CREDENTIALS=/path/to/mlflow-sa-key.json
 ```
 
-## Starting MLFLOW server with database and storage
+## Starting MLFLOW server with cloud database and cloud storage after run
+
+When everything is ready, you can test the script by launching locallly:
+
+```
+python train.py \
+--model_name bert-base-uncased \
+--freeze_base \
+--max_batches 10 \
+--number_epoch 3 \
+--experiment_name bert-train-sentiment \
+--tracking_uri "postgresql://$DB_RE_USER:$DB_RE_PASSWORD@$DB_RE_HOST:5432/$DB_RE_DB_NAME"
+--artifact_location gs://mlflow-artifacts-sentiment-analysis-app
+                         
+```
+
+After running you can launch the mlflow server
 
 ```
 cloud-sql-proxy PROJECT_ID:REGION:YOUR_INSTANCE &
 
 mlflow server \
-  --backend-store-uri postgresql://mlflow_user:password@127.0.0.1:5432/mlflow \
-  --default-artifact-root gs://your-mlflow-artifacts/mlflow \
-  --host 0.0.0.0 \
+  --backend-store-uri "postgresql://$DB_RE_USER:$DB_RE_PASSWORD@$DB_RE_HOST:5432/$DB_RE_DB_NAME" \
+  --default-artifact-root gs://mlflow-artifacts-sentiment-analysis-app  \
+  --host 127.0.0.1 \
   --port 5000
   ```
+# Run evaluation
+
+
+# Building a docker image
+
+
+  docker run <image> --freeze_base --number_epoch 3
+
+
+
+
+#

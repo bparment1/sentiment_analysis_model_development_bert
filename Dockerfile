@@ -21,7 +21,7 @@ ENV PYTHONUNBUFFERED=1
 
 # Override at runtime: docker run -e TRACKING_URI=... -e ARTIFACT_LOCATION=... <image>
 ENV TRACKING_URI=file:./mlruns
-ENV ARTIFACT_LOCATION=gs://my-bucket/mlflow/artifacts
+ENV ARTIFACT_LOCATION=
 
 ENTRYPOINT ["./entrypoint.sh"]
 
