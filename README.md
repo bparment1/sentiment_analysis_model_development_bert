@@ -370,15 +370,14 @@ mlflow server \
   --host 127.0.0.1 \
   --port 5000
   ```
-# Run evaluation
+# Run model evaluation
 
+Using evaluate.py
 
 # Building a docker image
 
+docker run <image> --freeze_base --number_epoch 3
 
-  docker run <image> --freeze_base --number_epoch 3
+# Deploy with cloud run
 
-
-
-
-#
+# CI/CD githubaction
