@@ -183,3 +183,19 @@ if __name__ == "__main__":
     main()
 
 
+'''
+#quick test
+python evaluate.py \
+  --checkpoint_path models/checkpoints/best_model_epoch5.pt \
+  --max_batches 10
+
+
+#with track experiment name and full data
+
+```
+python evaluate.py \
+  --checkpoint_path models/checkpoints/best_model_epoch5.pt \
+  --model_name bert-base-uncased \
+  --experiment_name bert-train-sentiment
+```
+'''

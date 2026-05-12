@@ -4,18 +4,19 @@ from datasets import load_dataset
 from transformers import AutoTokenizer
 import torch
 
+#too many hard coded values, use config
 MODEL_NAME = "bert-base-uncased"
 
 class SentimentDataset(Dataset):
     def __init__(self, texts, labels, tokenizer):
-        self.texts = texts
-        self.labels = labels
-        self.tokenizer = tokenizer
+        self.texts = texts #movie review tex
+        self.labels = labels #0,1 negative, postive sentiment
+        self.tokenizer = tokenizer #tokenizer for text
 
     def clean(self, text):
-        text = text.strip()
-        text = re.sub(r"http\S+", "URL", text)
-        text = re.sub(r"@\w+", "USER", text)
+        text = text.strip() #removes leading/trailing white space
+        text = re.sub(r"http\S+", "URL", text) #replace URLs with URL
+        text = re.sub(r"@\w+", "USER", text) #replace @mentions with USER
         return text
 
     def __len__(self):
@@ -29,7 +30,7 @@ class SentimentDataset(Dataset):
             text,
             truncation=True,
             padding="max_length",
-            max_length=512,                         # explicit max_length for BERT
+            max_length=512,    #should not be hard coded, use config                  # explicit max_length for BERT
             return_tensors="pt"
         )
 

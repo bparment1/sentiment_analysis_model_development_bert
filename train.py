@@ -111,7 +111,7 @@ def train(
     setup_mlflow(
         experiment_name=experiment_name,
         tracking_uri=tracking_uri,
-        artifact_location=artifact_location,
+        artifact_location=artifact_location
     )
 
     model, tokenizer = load_model_and_tokenizer(device, model_name, num_classes=2)
@@ -291,6 +291,7 @@ def main():
 if __name__ == "__main__":
     main()
 '''
+#this ran for 55 minutes
 python train.py \
 --model_name bert-base-uncased \
 --freeze_base \
@@ -299,6 +300,7 @@ python train.py \
 --experiment_name bert-train-sentiment \
 --tracking_uri file:./mlruns 
 
+#this ran for 5 minutes
 python train.py \
 --model_name bert-base-uncased \
 --freeze_base \
@@ -307,14 +309,6 @@ python train.py \
 --experiment_name bert-train-sentiment \
 --tracking_uri file:./mlruns 
 
-python train.py \
---model_name bert-base-uncased \
---freeze_base \
---max_batches 10 \
---number_epoch 3 \
---experiment_name bert-train-sentiment \
---tracking_uri file:./mlruns \
---artifact_location gs://my-bucket/mlflow/artifacts 
 
 python train.py \
 --model_name bert-base-uncased \
@@ -323,6 +317,6 @@ python train.py \
 --number_epoch 3 \
 --experiment_name bert-train-sentiment \
 --tracking_uri "postgresql://$DB_RE_USER:$DB_RE_PASSWORD@$DB_RE_HOST:5432/$DB_RE_DB_NAME"
---artifact_location gs://mlflow-artifacts-sentiment-analysis-app 
+--artifact_location "gs://mlflow-artifacts-sentiment-analysis-app" 
 
 '''

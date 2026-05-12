@@ -370,9 +370,62 @@ mlflow server \
   --host 127.0.0.1 \
   --port 5000
   ```
+
+## Starting mflow for local run
+
+If you are testing locally you would do the following:
+
+run a local training job:
+
+```
+python train.py \
+--model_name bert-base-uncased \
+--freeze_base \
+--max_batches 10 \
+--number_epoch 3 \
+--experiment_name bert-train-sentiment \
+--tracking_uri file:./mlruns 
+```
+
+Then star mlflow server locally:
+
+```
+mlflow server \
+  --backend-store-uri file:./mlruns \
+  --host 127.0.0.1 \
+  --port 5000
+```
+
+Or you can use the simpler command:
+
+```
+mlflow ui --port 5000
+```
+
 # Run model evaluation
 
-Using evaluate.py
+Using evaluate.py you can run a quick test with test data with 10 batches:
+
+```
+python evaluate.py \
+  --checkpoint_path models/checkpoints/best_model_epoch5.pt \
+  --max_batches 10
+```
+
+If you want to leverage mlflow for the evaluation using local mlrun you can do this:
+
+```
+python evaluate.py \
+  --checkpoint_path models/checkpoints/best_model_epoch5.pt \
+  --model_name bert-base-uncased \
+  --experiment_name bert-train-sentiment
+```
+
+A few quick notes:
+
+- mlflow does not provide automatic checkpoints for pyTorch pt but could use transfomers logmodel for mlflow.
+
+- evaluation can be a separate job from training in production. 
 
 # Building a docker image
 
